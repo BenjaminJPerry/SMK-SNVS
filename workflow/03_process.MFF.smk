@@ -135,7 +135,7 @@ rule filter_DP_bcftools:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<2 || INFO/DP>2500' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<7 || INFO/DP>80' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
