@@ -37,10 +37,10 @@ rule all:
         "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.bcftools.intersection.vcf.gz",
         "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.freebayes.intersection.vcf.gz",
         "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.haplotypeCaller.intersection.vcf.gz",
-        expand("results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.vcf.gz", samples = SAMPLES),
+        expand("results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz", samples = SAMPLES),
         expand("results/00_stats/{samples}.mosdepth.summary.txt", samples = SAMPLES),
         expand("results/00_stats/{samples}.sorted.mkdups.merged.bam.samtools-stats.txt", samples = SAMPLES),
-        expand("results/00_stats/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.vcf.gz.bcftools-stats.txt", samples = SAMPLES),
+        expand("results/00_stats/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz.bcftools-stats.txt", samples = SAMPLES),
 
 
 
@@ -93,8 +93,8 @@ rule filter_monomorphic_bcftools:
         norm = "results/03_merged/merged.FFF.chrom.norm.bcftools.vcf.gz",
         csi = "results/03_merged/merged.FFF.chrom.norm.bcftools.vcf.gz.csi",
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.bcftools.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.bcftools.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.bcftools.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.bcftools.vcf.gz.csi",
     threads:8
     conda:
         "bcftools-1.19"
@@ -122,8 +122,8 @@ rule filter_DP_bcftools:
         norm = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.bcftools.vcf.gz",
         csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.bcftools.vcf.gz.csi",
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.bcftools.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.bcftools.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.bcftools.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.bcftools.vcf.gz.csi",
     threads: 8
     conda:
         "bcftools-1.19"
@@ -137,7 +137,7 @@ rule filter_DP_bcftools:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<66 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<60 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -154,8 +154,8 @@ rule isec_bcftools_eva:
         eva = "resources/eva/9940_GCA_016772045.1_current_ids.sed.vcf.gz",
         eva_csi = "resources/eva/9940_GCA_016772045.1_current_ids.sed.vcf.gz.csi"
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.bcftools.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.bcftools.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.bcftools.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.bcftools.vcf.gz.csi",
     threads:8
     conda:
         "bcftools-1.19"
@@ -186,8 +186,8 @@ rule filter_monomorphic_freebayes:
         norm = "results/03_merged/merged.FFF.chrom.norm.freebayes.vcf.gz",
         csi = "results/03_merged/merged.FFF.chrom.norm.freebayes.vcf.gz.csi",
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.freebayes.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.freebayes.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.freebayes.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.freebayes.vcf.gz.csi",
     threads:8
     conda:
         "bcftools-1.19"
@@ -215,8 +215,8 @@ rule filter_DP_freebayes:
         norm = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.freebayes.vcf.gz",
         csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.freebayes.vcf.gz.csi",
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.freebayes.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.freebayes.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.freebayes.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.freebayes.vcf.gz.csi",
     threads: 8
     conda:
         "bcftools-1.19"
@@ -230,7 +230,7 @@ rule filter_DP_freebayes:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<66 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<60 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -247,8 +247,8 @@ rule isec_freebayes_eva:
         eva = "resources/eva/9940_GCA_016772045.1_current_ids.sed.vcf.gz",
         eva_csi = "resources/eva/9940_GCA_016772045.1_current_ids.sed.vcf.gz.csi"
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.freebayes.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.freebayes.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.freebayes.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.freebayes.vcf.gz.csi",
     threads:8
     conda:
         "bcftools-1.19"
@@ -279,8 +279,8 @@ rule filter_monomorphic_haplotypeCaller:
         norm = "results/03_merged/merged.FFF.chrom.norm.haplotypeCaller.vcf.gz",
         csi = "results/03_merged/merged.FFF.chrom.norm.haplotypeCaller.vcf.gz.csi",
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.haplotypeCaller.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.haplotypeCaller.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.haplotypeCaller.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.haplotypeCaller.vcf.gz.csi",
     threads:8
     conda:
         "bcftools-1.19"
@@ -308,8 +308,8 @@ rule filter_DP_haplotypeCaller:
         norm = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.haplotypeCaller.vcf.gz",
         csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.haplotypeCaller.vcf.gz.csi",
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.haplotypeCaller.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.haplotypeCaller.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.haplotypeCaller.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.haplotypeCaller.vcf.gz.csi",
     threads: 8
     conda:
         "bcftools-1.19"
@@ -323,7 +323,7 @@ rule filter_DP_haplotypeCaller:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<66 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<60 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -340,8 +340,8 @@ rule isec_haplotypeCaller_eva:
         eva = "resources/eva/9940_GCA_016772045.1_current_ids.sed.vcf.gz",
         eva_csi = "resources/eva/9940_GCA_016772045.1_current_ids.sed.vcf.gz.csi"
     output:
-        filtered = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.haplotypeCaller.vcf.gz"),
-        csi = temp("results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.haplotypeCaller.vcf.gz.csi"),
+        filtered = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.haplotypeCaller.vcf.gz",
+        csi = "results/04_filtered/merged.FFF.chrom.norm.monomorphic.DPFilt.eva.haplotypeCaller.vcf.gz.csi",
     threads:8
     conda:
         "bcftools-1.19"
@@ -446,7 +446,7 @@ rule bcftools_private_snps:
         """
 
 
-rule filter_MQ60_bcftools:
+rule filter_MQ60_bcftools_private_snps:
     priority:100
     input:
         private = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.vcf.gz",
@@ -475,12 +475,41 @@ rule filter_MQ60_bcftools:
         """
 
 
+rule filter_DP_bcftools_private_snps:
+    priority:100
+    input:
+        filtered = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.vcf.gz",
+        csi = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.vcf.gz.csi",
+    output:
+        filtered = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz",
+        csi = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz.csi",
+    threads: 8
+    conda:
+        "bcftools-1.19"
+    resources:
+        mem_gb = lambda wildcards, attempt: 8 + ((attempt - 1) * 8),
+        time = lambda wildcards, attempt: 60 + ((attempt - 1) * 60),
+        partition = "compute",
+        attempt = lambda wildcards, attempt: attempt,
+    shell:
+        """
+        # -e is 'exclude'
+
+        bcftools view --threads {threads} -e 'INFO/DP<4' {input.filtered} -O z8 -o {output.filtered};
+
+        bcftools index --threads {threads} {output.filtered} -o {output.csi};
+
+        echo "Total snps in {output.filtered}: $(bcftools view --threads {threads} {output.filtered} | grep -v "#" | wc -l)" | tee -a snps.counts.summary.txt;
+
+        """
+
+
 rule bcftools_stats_private_MQ:
     priority: 100
     input:
-        filtered = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.vcf.gz",
+        filtered = "results/05_private/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz",
     output:
-        stats = "results/00_stats/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.vcf.gz.bcftools-stats.txt",
+        stats = "results/00_stats/{samples}.FFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz.bcftools-stats.txt",
     threads: 6
     conda:
         "bcftools-1.19"
