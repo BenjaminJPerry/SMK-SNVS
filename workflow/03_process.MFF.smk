@@ -40,6 +40,7 @@ rule all:
         expand("results/05_private/{samples}.MFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz", samples = SAMPLES),
         expand("results/00_stats/{samples}.mosdepth.summary.txt", samples = SAMPLES),
         expand("results/00_stats/{samples}.sorted.mkdups.merged.bam.samtools-stats.txt", samples = SAMPLES),
+        #TODO bcftools stats for cohort intersection
         expand("results/00_stats/{samples}.MFF.norm.monomorphic.DPFilt.eva.bcftools.intersection.MQ60.DP.vcf.gz.bcftools-stats.txt", samples = SAMPLES),
 
 rule get_eva_snvs:
@@ -135,7 +136,7 @@ rule filter_DP_bcftools:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<10 || INFO/DP>193' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<33 || INFO/DP>103' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -228,7 +229,7 @@ rule filter_DP_freebayes:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<10 || INFO/DP>193' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<33 || INFO/DP>103' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -321,7 +322,7 @@ rule filter_DP_haplotypeCaller:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<10 || INFO/DP>193' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<33 || INFO/DP>103' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -494,7 +495,7 @@ rule filter_DP_bcftools_private_snps:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<7' {input.filtered} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<12 || INFO/DP>61' {input.filtered} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 

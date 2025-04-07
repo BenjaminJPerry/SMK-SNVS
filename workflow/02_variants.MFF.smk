@@ -23,7 +23,7 @@ onstart:
     os.system('echo "  CONDA VERSION: $(conda --version)"')
 
 
-SAMPLES = ('OFF3', '1945')
+SAMPLES = ('OFF3DS', '1945')
 
 
 rule all:
@@ -70,7 +70,7 @@ rule bcftools_vcf:
         "bcftools index --threads {threads} {output.vcf} -o  {output.csi} "
 
 
-rule view_bcftools_chrom: #TODO
+rule view_bcftools_chrom:
     priority:100
     input:
         vcf = "results/02_snvs/{samples}.rawsnvs.bcftools.vcf.gz",
@@ -98,7 +98,7 @@ rule view_bcftools_chrom: #TODO
 
         bcftools index --threads {threads} {output.filtered_vcf} -o {output.filtered_vcf_csi} &&
 
-        echo "Total snps in {output.filtered_vcf}: $(cat {output.filtered_vcf} | gunzip | grep -v "#" | wc -l)" | tee -a snps.counts.summary.txt 
+        echo "Total snps in {output.filtered_vcf}: $(bcftools view --threads {threads} {output.filtered_vcf} | grep -v "#" | wc -l)" | tee -a snps.counts.summary.txt;
         
         """
 
@@ -127,6 +127,8 @@ rule norm_samples_bcftools:
     
         bcftools index --threads {threads} {output.norm};
     
+        echo "Total snps in {output.norm}: $(bcftools view --threads {threads} {output.norm} | grep -v "#" | wc -l)" | tee -a snps.counts.summary.txt;
+
         """
 
 
@@ -156,7 +158,7 @@ rule merge_bcftools_vcf:
 
         bcftools index --threads {threads} {output.merged} -o {output.csi};
 
-        echo "Total snps in {output.merged}: $(cat {output.merged} | gunzip | grep -v "#" | wc -l)" | tee -a snps.counts.summary.txt 
+        echo "Total snps in {output.merged}: $(bcftools view --threads {threads} {output.merged} | grep -v "#" | wc -l)" | tee -a snps.counts.summary.txt;
 
 
         """

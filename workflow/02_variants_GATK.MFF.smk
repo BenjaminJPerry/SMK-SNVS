@@ -23,7 +23,7 @@ onstart:
     os.system('echo "  CONDA VERSION: $(conda --version)"')
 
 
-SAMPLES = ('OFF3', '1945')
+SAMPLES = ('OFF3DS', '1945')
 CHROM = ('NC_056054.1', 'NC_056055.1', 'NC_056056.1', 'NC_056057.1', 'NC_056058.1', 'NC_056059.1', 'NC_056060.1', 'NC_056061.1', 'NC_056062.1', 'NC_056063.1', 'NC_056064.1', 'NC_056065.1', 'NC_056066.1', 'NC_056067.1', 'NC_056068.1', 'NC_056069.1', 'NC_056070.1', 'NC_056071.1', 'NC_056072.1', 'NC_056073.1', 'NC_056074.1', 'NC_056075.1', 'NC_056076.1', 'NC_056077.1', 'NC_056078.1', 'NC_056079.1', 'NC_056080.1')
 
 
@@ -60,6 +60,7 @@ rule gatk_HaplotypeCaller_vcf:
         DTMP = "tmp",
         attempt = lambda wildcards, attempt: attempt,
     shell:
+        'export PATH=/home/agresearch.co.nz/perrybe/.conda/envs/gatk-4.5.0.0/bin:$PATH; '
         'gatk --java-options "-Xmx{resources.mem_gb}G -XX:ParallelGCThreads={threads}"  '
         'HaplotypeCaller '
         '--pileup-detection '

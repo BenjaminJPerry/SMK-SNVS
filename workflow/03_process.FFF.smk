@@ -137,7 +137,7 @@ rule filter_DP_bcftools:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<60 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<119 || INFO/DP>234' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -230,7 +230,7 @@ rule filter_DP_freebayes:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<60 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<119 || INFO/DP>234' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -323,7 +323,7 @@ rule filter_DP_haplotypeCaller:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<60 || INFO/DP>282' {input.norm} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<119 || INFO/DP>234' {input.norm} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 
@@ -495,7 +495,7 @@ rule filter_DP_bcftools_private_snps:
         """
         # -e is 'exclude'
 
-        bcftools view --threads {threads} -e 'INFO/DP<4' {input.filtered} -O z8 -o {output.filtered};
+        bcftools view --threads {threads} -e 'INFO/DP<19 || INFO/DP>76' {input.filtered} -O z8 -o {output.filtered};
 
         bcftools index --threads {threads} {output.filtered} -o {output.csi};
 

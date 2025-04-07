@@ -6,3 +6,5 @@ fastq
 test
 benchmarks
 samtools*
+tmp/
+snps.counts.summary.txt
