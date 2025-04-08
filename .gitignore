@@ -8,3 +8,5 @@ benchmarks
 samtools*
 tmp/
 snps.counts.summary.txt
+*html
+results/
